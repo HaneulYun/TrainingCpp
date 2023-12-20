@@ -1,31 +1,46 @@
 #include <string>
 #include <vector>
+#include <set>
 
 using namespace std;
 
-int solution(vector<int> bandage, int health, vector<vector<int>> attacks) {
-    int bandageTime = bandage[0];
-    int bandageHeal = bandage[1];
-    int bandageExtra = bandage[2];
+int getSize(int x, int y, vector<vector<int>>& land, set<int>& linked)
+{
+    if (!land[y][x])
+        return 0;
 
-    int maxHealth = health;
+    land[y][x] = 0;
+    int sum = 1;
+    if (x > 0)
+        sum += getSize(x - 1, y, land, linked);
+    if (x < land[0].size() - 1)
+        sum += getSize(x + 1, y, land, linked);
+    if (y > 0)
+        sum += getSize(x, y - 1, land, linked);
+    if (y < land.size() - 1)
+        sum += getSize(x, y + 1, land, linked);
+    linked.insert(x);
 
-    int prevAttackTime = 0;
-    for (const auto& attack : attacks)
-    {
-        int time = attack[0] - prevAttackTime - 1;
-        health += time * bandageHeal;
-        health += (time / bandageTime) * bandageExtra;
-        if (health > maxHealth)
-            health = maxHealth;
+    return sum;
+}
 
-        prevAttackTime = attack[0];
+int solution(vector<vector<int>> land) {
+    vector<int> sum(land[0].size());
 
-        health -= attack[1];
-        if (health <= 0)
-            return -1;
-    }
-    return health;
+    for (int i = 0; i < land.size(); ++i)
+        for (int j = 0; j < land[0].size(); ++j)
+        {
+            set<int> linked;
+            int size = getSize(j, i, land, linked);
+            for (auto v : linked)
+                sum[v] += size;
+        }
+
+    int max = 0;
+    for (auto v : sum)
+        if (v > max)
+            max = v;
+    return max;
 }
 
 int main()
