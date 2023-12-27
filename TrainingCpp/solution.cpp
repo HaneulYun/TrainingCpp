@@ -1,15 +1,19 @@
-#include <vector>
-#include <set>
-#include <algorithm>
+#include <iostream>
+
 using namespace std;
 
-int solution(vector<int> nums)
-{
-    set<int> s{ nums.begin(), nums.end() };
-    return min(nums.size() / 2, s.size());
-}
+int main(void) {
+    int year, answer;
+    string age_type;
+    cin >> year >> age_type;
 
-int main()
-{
+    if (age_type == "Korea") {
+        answer = 2030 - year + 1;
+    }
+    else if (age_type == "Year") { 
+        answer = 2030 - year;
+    }
+
+    cout << answer << endl;
     return 0;
 }
