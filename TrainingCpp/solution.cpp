@@ -1,24 +1,34 @@
-#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-int main(void) {
-    int start;
-    int before;
-    int after;
-    cin >> start >> before >> after;
-
-    int money = start;
-    int month = 1;
-
-    while (money < 70) {
-        money += before;
-        month++;
+vector<int> solution(string route) {
+    int east = 0;
+    int north = 0;
+    vector<int> answer(2);
+    for (int i = 0; i < route.length(); i++) {
+        switch (route[i]) {
+        case 'N':
+            north++;
+            break;
+        case 'S':
+            north--;
+            break;
+        case 'E':
+            east++;
+            break;
+        case 'W':
+            east--;
+            break;
+        }
     }
-    while (money < 100) {
-        money += after;
-        month++;
-    }
-    cout << month << endl;
+    answer[0] = east;
+    answer[1] = north;
+    return answer;
+}
+
+int main()
+{
     return 0;
 }
