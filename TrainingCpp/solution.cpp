@@ -3,29 +3,12 @@
 
 using namespace std;
 
-vector<int> solution(string route) {
-    int east = 0;
-    int north = 0;
-    vector<int> answer(2);
-    for (int i = 0; i < route.length(); i++) {
-        switch (route[i]) {
-        case 'N':
-            north++;
-            break;
-        case 'S':
-            north--;
-            break;
-        case 'E':
-            east++;
-            break;
-        case 'W':
-            east--;
-            break;
-        }
-    }
-    answer[0] = east;
-    answer[1] = north;
-    return answer;
+vector<int> solution(int brown, int yellow) {
+    brown = (brown - 4) / 2;
+    for (int i = 0; i < brown; ++i)
+        if (i * (brown - i) == yellow)
+            return vector<int>{brown - i + 2, i + 2};
+    return {};
 }
 
 int main()
