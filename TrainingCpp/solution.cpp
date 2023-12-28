@@ -1,22 +1,22 @@
 #include <string>
 #include <vector>
-#include <map>
+#include <algorithm>
 
 using namespace std;
 
-vector<string> solution(vector<string> players, vector<string> callings) {
-    map<string, int> pos;
-    for (int i = 0; i < players.size(); ++i)
-        pos[players[i]] = i;
-
-    for (const auto& calling : callings)
-    {
-        int p = pos[calling];
-        swap(players.at(p - 1), players.at(p));
-        swap(pos[players.at(p - 1)], pos[players.at(p)]);
-    }
-
-    return players;
+int solution(vector<vector<int>> targets) {
+    int answer = 0, p = 0;
+    sort(targets.begin(), targets.end());
+    for (auto iter = targets.begin(); iter != targets.end(); ++iter)
+        if (p <= (*iter)[0])
+        {
+            p = (*iter)[1];
+            for (auto t = iter; t != targets.end() && (*t)[0] < p; ++t)
+                if ((*t)[1] < p)
+                    p = (*t)[1];
+            ++answer;
+        }
+    return answer;
 }
 
 int main()
