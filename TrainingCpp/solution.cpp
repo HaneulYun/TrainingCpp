@@ -1,22 +1,22 @@
 #include <string>
+#include <vector>
 
 using namespace std;
 
-bool solution(string s)
-{
-    int cnt = 0;
-    for (auto c : s)
-    {
-        if (c == '\(')
-            ++cnt;
-        else
-            --cnt;
-        if (cnt < 0)
-            return false;
+vector<string> solution(vector<int> numbers, vector<int> our_score, vector<int> score_list) {
+    int num_student = numbers.size();
+    vector<string> answer(num_student);
+
+    for (int i = 0; i < num_student; i++) {
+        if (our_score[i] == score_list[numbers[i] - 1]) {
+            answer[i] = "Same";
+        }
+        else {
+            answer[i] = "Different";
+        }
     }
-    if (cnt != 0)
-        return false;
-    return true;;
+
+    return answer;
 }
 
 int main()
