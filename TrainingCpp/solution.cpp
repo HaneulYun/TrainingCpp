@@ -1,24 +1,33 @@
-#include <string>
 #include <vector>
-#include <map>
 #include <algorithm>
-#include <numeric>
-#include <cmath>
 
 using namespace std;
 
-int solution(vector<int> picks, vector<string> minerals) {
-    int answer = 0;
-    map<string, vector<int>> info{ {"diamond", {0, 100}}, {"iron", {1, 10}}, {"stone", {2, 1}} };
-    vector<int> area_stress((minerals.size() + 4) / 5);
-    for (int i = 0, s = min(accumulate(picks.begin(), picks.end(), 0) * 5, (int)minerals.size()); i < s; ++i)
-        area_stress[i / 5] += info[minerals[i]][1];
-    sort(area_stress.begin(), area_stress.end(), greater<>());
-    auto iter = area_stress.begin();
-    for (const auto k : { "diamond", "iron", "stone" })
-        for (int i = 0; i < picks[info[k][0]] && iter != area_stress.end(); ++i, ++iter)
-            for (int j = 0; j < 3; ++j, *iter /= info["iron"][1])
-                answer += *iter % info["iron"][1] * pow(5, max(j - 2 + info[k][0], 0));
+struct Node
+{
+    int x, y, n;
+};
+
+void search(vector<int>& preorder, vector<int>& postorder, vector<Node>::iterator begin, vector<Node>::iterator end)
+{
+    auto iter = max_element(begin, end, [](const auto& l, const auto& r) { return l.y < r.y; });
+
+    preorder.push_back(iter->n);
+    if (begin != iter)
+        search(preorder, postorder, begin, iter);
+    if (iter + 1 != end)
+        search(preorder, postorder, iter + 1, end);
+    postorder.push_back(iter->n);
+}
+
+vector<vector<int>> solution(vector<vector<int>> nodeinfo) {
+    vector<Node> nodes(nodeinfo.size());
+    for (int i = 0; i < nodeinfo.size(); ++i)
+        nodes[i] = { nodeinfo[i][0], nodeinfo[i][1], i + 1 };
+    sort(nodes.begin(), nodes.end(), [](const auto& l, const auto& r) { return l.x < r.x; });
+
+    vector<vector<int>> answer(2);
+    search(answer[0], answer[1], nodes.begin(), nodes.end());
     return answer;
 }
 
