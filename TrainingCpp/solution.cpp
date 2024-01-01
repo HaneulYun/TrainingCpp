@@ -1,18 +1,12 @@
-#include <algorithm>
 #include <vector>
-#include <map>
 
 using namespace std;
 
-int solution(vector<int> array) {
-    int answer = 0;
-    map<int, int> m;
-    for (const auto n : array)
-        ++m[n];
-    auto pred = [](const auto& l, const auto& r) { return l.second < r.second; };
-    auto gm = max_element(m.begin(), m.end(), pred);
-    auto rm = max_element(m.rbegin(), m.rend(), pred);
-    return gm->first == rm->first ? gm->first : -1;
+int solution(vector<vector<int>> triangle) {
+    for (int i = triangle.size() - 2; i >= 0; --i)
+        for (int j = 0; j < triangle[i].size(); ++j)
+            triangle[i][j] += max(triangle[i + 1][j], triangle[i + 1][j + 1]);
+    return triangle[0][0];
 }
 
 int main()
